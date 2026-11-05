@@ -57,6 +57,7 @@ This document maintains a chronological record of all features, architecture set
 | **Styling** | Tailwind CSS | `^4.0.0` | Utility-first styling engine |
 | **Language** | TypeScript | `^5.0.0` | Static typing |
 | **Linting** | ESLint | `^9.0.0` | Code quality and syntax standards |
+| **Deployment** | Vercel | Production | Official live deployment at [client-locker-ohhb.vercel.app](https://client-locker-ohhb.vercel.app/) |
 | **CI / Automation**| GitHub Actions | v4 | Automated builds on push/PR |
 | **Security** | Gitleaks Action | v2 | Leaked secret and credential detection |
 
