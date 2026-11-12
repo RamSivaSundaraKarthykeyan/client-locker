@@ -17,6 +17,30 @@ Secure management, storage, and access control for sensitive client credentials 
 
 ---
 
+## Demo & Test Logins
+
+The application includes dedicated, server-verified role-based interfaces for all 3 required roles.
+
+> **Common Password for all test accounts:** `Password123!`
+
+| Role | Email Address | Description | Destination |
+| :--- | :--- | :--- | :--- |
+| **Partner** | `partner.elena@apexadvisory.com` | Firm Managing Partner | `/partner/dashboard` (Firm portfolio & stats) |
+| **Partner** | `partner.marcus@apexadvisory.com` | Tax & Compliance Partner | `/partner/dashboard` |
+| **Staff** | `staff.sarah@apexadvisory.com` | Senior Audit Associate | `/staff/dashboard` (Clients & file upload) |
+| **Staff (Trainee)** | `staff.leo@apexadvisory.com` | Audit Trainee | `/staff/dashboard` |
+| **Client** | `client.novatech@clientlocker.test` | NovaTech Dynamics Rep | `/client/dashboard` (Client portal & files) |
+| **Client** | `client.bluewave@clientlocker.test` | BlueWave Logistics Rep | `/client/dashboard` |
+
+---
+
+## 60-Second Walkthrough Video
+
+- **Recording Link**: [Watch the 60-second M2 Flow on Google Drive (Set to 'Anyone with link')](https://drive.google.com/file/d/YOUR_RECORDING_LINK_HERE/view?usp=sharing)
+*(Replace `YOUR_RECORDING_LINK_HERE` with your Google Drive shareable link once recorded).*
+
+---
+
 ## Getting Started
 
 ### Prerequisites

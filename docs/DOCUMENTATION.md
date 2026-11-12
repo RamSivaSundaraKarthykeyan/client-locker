@@ -48,6 +48,35 @@ This document maintains a chronological record of all features, architecture set
 
 ---
 
+### 2026-11-12: Milestone 2 (M2) — Private Vault, Multi-Role Auth & File Flow Implementation
+- **Scope**: Core M2 delivery featuring database schema, seed automation, server-enforced authentication, private storage integration, and document upload/list/view flows.
+- **Key Modules Implemented**:
+  1. **Database Schema & Storage Architecture** ([`supabase/schema.sql`](../supabase/schema.sql)):
+     - Tables: `firms`, `people`, `clients`, `client_access`, `files`, `checklist_items`.
+     - Constraints: UUID primary keys, role enum validation (`partner`, `staff`, `client`), cascade deletions.
+     - Storage Bucket: Created `client-vault` as a strictly **private** Supabase storage bucket (`public = false`, 4 MB file limit, restricted to PDF, JPG, PNG).
+  2. **Automated Seed Script** ([`scripts/seed.ts`](../scripts/seed.ts)):
+     - Seeds 1 firm (*Apex Accounting & Advisory LLP*).
+     - Seeds 2 partners (*Elena Rostova*, *Marcus Vance*).
+     - Seeds 6 staff members (including 1 trainee: *Leo Martin*).
+     - Seeds 10 realistic corporate clients (*NovaTech Dynamics*, *BlueWave Logistics*, etc.), each mapped with primary contact accounts and 5 checklist items.
+     - Automatically uploads a mock PDF file to the private storage bucket and registers it in the `files` table.
+     - Script executable with `npm run seed`.
+  3. **Role-Based Authentication & Session Management** ([`lib/auth.ts`](../lib/auth.ts), [`app/actions/auth.ts`](../app/actions/auth.ts)):
+     - Email & password authentication using `bcryptjs` password hashing.
+     - Session state preserved in secure HTTP-only cookies (`cl_session`).
+     - **Strict server-side role resolution**: Roles are resolved dynamically from database records and never trusted from client-side inputs.
+     - Route separation:
+       - `/partner/dashboard`: Executive firm overview, metrics, and client list.
+       - `/staff/dashboard`: Client portfolio, checklist tracking, and access to individual client vaults.
+       - `/client/dashboard`: Client portal showing assigned checklist tasks and firm-shared documents only.
+  4. **Private File Upload & Streaming** ([`app/actions/files.ts`](../app/actions/files.ts), [`app/api/files/[fileId]/view/route.ts`](../app/api/files/[fileId]/view/route.ts)):
+     - Accepts PDF, JPG, and PNG files up to 4 MB.
+     - Uploads directly into private storage bucket `client-vault` via authenticated server action.
+     - Files are served via `/api/files/[fileId]/view` streaming route which verifies user session permissions before downloading from private storage.
+
+---
+
 ## Technical Stack Summary
 
 | Layer | Technology | Version | Purpose |
