@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build --webpack",
+    "test": "tsx --test __tests__/**/*.test.ts",
     "seed": "tsx --env-file=.env.local scripts/seed.ts",
     "start": "next start",
     "lint": "eslint"
