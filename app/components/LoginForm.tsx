@@ -2,6 +2,7 @@
 
 import { useActionState } from 'react';
 import { loginAction, ActionState } from '@/app/actions/auth';
+import { MagicLinkRequest } from '@/app/components/MagicLinkRequest';
 
 const initialState: ActionState = {};
 
@@ -113,6 +114,9 @@ export function LoginForm() {
             </button>
           </div>
         </div>
+
+        {/* Client Magic Link Section */}
+        <MagicLinkRequest />
       </div>
     </div>
   );
