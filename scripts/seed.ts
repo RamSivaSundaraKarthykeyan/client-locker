@@ -3,7 +3,6 @@ import bcrypt from 'bcryptjs';
 import fs from 'fs';
 import path from 'path';
 
-// Load .env.local if present and not already in environment
 function loadEnvLocal() {
   const envPath = path.resolve(process.cwd(), '.env.local');
   if (fs.existsSync(envPath)) {
@@ -31,7 +30,7 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 
 if (!supabaseUrl || !serviceRoleKey) {
-  console.error('Error: NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be set to run the seed script.');
+  console.error('Error: NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be set.');
   process.exit(1);
 }
 
@@ -40,13 +39,13 @@ const supabase = createClient(supabaseUrl, serviceRoleKey, {
 });
 
 async function runSeed() {
-  console.log('--- Starting Seed Script ---');
+  console.log('--- Starting M4 Seed Script for Vaigai Vel & Associates (Madurai) ---');
 
-  // 1. Create Firm
-  console.log('1. Creating Firm...');
+  // 1. Create Firm: Vaigai Vel & Associates
+  console.log('1. Creating Firm: Vaigai Vel & Associates...');
   const { data: firm, error: firmError } = await supabase
     .from('firms')
-    .insert({ name: 'Apex Accounting & Advisory LLP' })
+    .insert({ name: 'Vaigai Vel & Associates (Chartered Accountants, Madurai)' })
     .select()
     .single();
 
@@ -54,27 +53,26 @@ async function runSeed() {
   const firmId = firm.id;
   console.log(`Created firm: ${firm.name} (${firmId})`);
 
-  // Default test password for all test accounts
   const commonPasswordHash = await bcrypt.hash('Password123!', 10);
 
-  // 2. Create 2 Partners
+  // 2. Create 2 Partners (Kavitha Vel + Senior Partner)
   console.log('2. Creating 2 Partners...');
   const partnersData = [
+    {
+      firm_id: firmId,
+      email: 'partner.kavitha@vaigaivel.test',
+      password_hash: commonPasswordHash,
+      full_name: 'Kavitha Vel',
+      role: 'partner',
+      title: 'Managing Partner',
+    },
     {
       firm_id: firmId,
       email: 'partner.elena@apexadvisory.com',
       password_hash: commonPasswordHash,
       full_name: 'Elena Rostova',
       role: 'partner',
-      title: 'Managing Partner',
-    },
-    {
-      firm_id: firmId,
-      email: 'partner.marcus@apexadvisory.com',
-      password_hash: commonPasswordHash,
-      full_name: 'Marcus Vance',
-      role: 'partner',
-      title: 'Tax & Compliance Partner',
+      title: 'Audit Partner',
     },
   ];
 
@@ -85,7 +83,7 @@ async function runSeed() {
   if (partnersError) throw partnersError;
   console.log(`Created ${partners.length} partners.`);
 
-  // 3. Create 6 Staff (one is a trainee)
+  // 3. Create 6 Staff (including 1 trainee: Leo Martin)
   console.log('3. Creating 6 Staff (including 1 trainee)...');
   const staffData = [
     {
@@ -130,11 +128,11 @@ async function runSeed() {
     },
     {
       firm_id: firmId,
-      email: 'staff.leo@apexadvisory.com',
+      email: 'staff.trainee@vaigaivel.test',
       password_hash: commonPasswordHash,
       full_name: 'Leo Martin (Trainee)',
       role: 'staff',
-      title: 'Trainee',
+      title: 'Audit Trainee',
     },
   ];
 
@@ -145,8 +143,25 @@ async function runSeed() {
   if (staffError) throw staffError;
   console.log(`Created ${staffList.length} staff members.`);
 
-  // 4. Create 10 Clients (Entities + Primary contact person for each)
-  console.log('4. Creating 10 Clients and their login accounts...');
+  // 4. Create 1 Auditor (assigned to exactly 2 clients)
+  console.log('4. Creating Auditor...');
+  const { data: auditor, error: auditorErr } = await supabase
+    .from('people')
+    .insert({
+      firm_id: firmId,
+      email: 'auditor.kumar@apexadvisory.com',
+      password_hash: commonPasswordHash,
+      full_name: 'Kumar Swaminathan',
+      role: 'auditor',
+      title: 'External Statutory Auditor',
+    })
+    .select()
+    .single();
+  if (auditorErr) throw auditorErr;
+  console.log(`Created auditor: ${auditor.full_name} (${auditor.email})`);
+
+  // 5. Create 10 Corporate Clients (each with 5 checklist items)
+  console.log('5. Creating 10 Clients...');
   const clientsDefinitions = [
     { company: 'NovaTech Dynamics', industry: 'Enterprise SaaS', contactName: 'Rachel Green', email: 'client.novatech@clientlocker.test' },
     { company: 'BlueWave Logistics Ltd', industry: 'Supply Chain', contactName: 'Liam Carter', email: 'client.bluewave@clientlocker.test' },
@@ -161,11 +176,12 @@ async function runSeed() {
   ];
 
   const primaryStaff = staffList[0]; // Sarah Jenkins
+  const trainee = staffList[5]; // Leo Martin (Trainee)
   const createdClients = [];
 
-  for (const item of clientsDefinitions) {
-    // A. Create the client person
-    const { data: clientPerson, error: personErr } = await supabase
+  for (let i = 0; i < clientsDefinitions.length; i++) {
+    const item = clientsDefinitions[i];
+    const { data: clientPerson } = await supabase
       .from('people')
       .insert({
         firm_id: firmId,
@@ -173,14 +189,12 @@ async function runSeed() {
         password_hash: commonPasswordHash,
         full_name: item.contactName,
         role: 'client',
-        title: 'Authorized Representative',
+        title: 'Managing Director',
       })
       .select()
       .single();
-    if (personErr) throw personErr;
 
-    // B. Create client entity
-    const { data: clientEntity, error: clientErr } = await supabase
+    const { data: clientEntity } = await supabase
       .from('clients')
       .insert({
         firm_id: firmId,
@@ -190,68 +204,102 @@ async function runSeed() {
       })
       .select()
       .single();
-    if (clientErr) throw clientErr;
 
     createdClients.push(clientEntity);
 
-    // C. Grant client access to staff members
-    await supabase.from('client_access').insert([
-      { client_id: clientEntity.id, person_id: primaryStaff.id },
-      { client_id: clientEntity.id, person_id: clientPerson.id },
-    ]);
+    // Give primary staff access to all clients
+    await supabase.from('client_access').insert({
+      client_id: clientEntity.id,
+      person_id: primaryStaff.id,
+      given_by: partners[0].id,
+    });
 
-    // D. Add 5 Checklist Items for this client
+    // Give Trainee access to the first 2 clients (for demo moment where Partner removes Trainee)
+    if (i < 2) {
+      await supabase.from('client_access').insert({
+        client_id: clientEntity.id,
+        person_id: trainee.id,
+        given_by: partners[0].id,
+      });
+    }
+
+    // Give Auditor access to exactly 2 clients (Clients 0 and 1)
+    if (i < 2) {
+      await supabase.from('client_access').insert({
+        client_id: clientEntity.id,
+        person_id: auditor.id,
+        given_by: partners[0].id,
+      });
+    }
+
+    // Add 5 checklist items
     const checklist = [
-      { client_id: clientEntity.id, title: 'Upload Signed Engagement Letter 2026', status: 'completed' },
-      { client_id: clientEntity.id, title: 'Provide Q3 Trial Balance & General Ledger', status: 'pending' },
-      { client_id: clientEntity.id, title: 'Bank Reconciliation Statements (Jan - Oct)', status: 'in_review' },
-      { client_id: clientEntity.id, title: 'Certificate of Incorporation & Shareholder Register', status: 'completed' },
-      { client_id: clientEntity.id, title: 'Director Identification Documents (KYC/AML)', status: 'pending' },
+      { client_id: clientEntity.id, title: 'Upload Signed Engagement Letter 2026', status: 'completed', done: true },
+      { client_id: clientEntity.id, title: 'Provide Q3 Trial Balance & General Ledger', status: 'pending', done: false },
+      { client_id: clientEntity.id, title: 'Bank Reconciliation Statements (Jan - Oct)', status: 'in_review', done: false },
+      { client_id: clientEntity.id, title: 'Certificate of Incorporation & Shareholder Register', status: 'completed', done: true },
+      { client_id: clientEntity.id, title: 'Director Identification Documents (KYC/AML)', status: 'pending', done: false },
     ];
     await supabase.from('checklist_items').insert(checklist);
   }
-  console.log(`Created ${createdClients.length} clients with 5 checklist items each.`);
+  console.log(`Created 10 clients with checklist items and access rules.`);
 
-  // 5. Upload sample private file to private storage bucket 'client-vault'
-  console.log('5. Ensuring private bucket and uploading sample PDF...');
+  // 6. Ensure Storage Bucket and sample files
+  console.log('6. Uploading sample files to private bucket...');
   const samplePdfBytes = Buffer.from(
     `%PDF-1.4\n1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj\n2 0 obj<</Type/Pages/Count 1/Kids[3 0 R]>>endobj\n3 0 obj<</Type/Page/MediaBox[0 0 612 792]/Parent 2 0 R/Resources<<>>>>endobj\nxref\n0 4\n0000000000 65535 f\n0000000009 00000 n\n0000000052 00000 n\n0000000101 00000 n\ntrailer<</Size 4/Root 1 0 R>>\nstartxref\n178\n%%EOF`
   );
 
   const sampleClientId = createdClients[0].id;
-  const storageFilePath = `${sampleClientId}/sample_engagement_letter.pdf`;
+  const storageFilePath = `${sampleClientId}/sample_bank_reconciliation.pdf`;
 
-  const { error: uploadError } = await supabase.storage
-    .from('client-vault')
-    .upload(storageFilePath, samplePdfBytes, {
-      contentType: 'application/pdf',
-      upsert: true,
-    });
+  await supabase.storage.from('client-vault').upload(storageFilePath, samplePdfBytes, {
+    contentType: 'application/pdf',
+    upsert: true,
+  });
 
-  if (uploadError) {
-    console.warn('Note: Could not upload sample file to bucket directly (verify bucket "client-vault" exists in Supabase):', uploadError.message);
-  } else {
-    console.log('Uploaded sample PDF to private bucket "client-vault".');
-    await supabase.from('files').insert({
+  const { data: sampleFile } = await supabase
+    .from('files')
+    .insert({
       client_id: sampleClientId,
       uploaded_by_person_id: primaryStaff.id,
-      file_name: 'sample_engagement_letter.pdf',
+      file_name: 'sample_bank_reconciliation.pdf',
       file_size_bytes: samplePdfBytes.length,
       mime_type: 'application/pdf',
       storage_path: storageFilePath,
-    });
-    console.log('Recorded sample file in "files" table.');
-  }
+    })
+    .select()
+    .single();
+
+  // 7. Seed Initial Activity Log Entries
+  await supabase.from('activity_log').insert([
+    {
+      person_id: primaryStaff.id,
+      file_id: sampleFile?.id,
+      client_id: sampleClientId,
+      action: 'upload',
+      blocked: false,
+      details: 'Initial upload of sample_bank_reconciliation.pdf',
+    },
+    {
+      person_id: partners[0].id,
+      client_id: sampleClientId,
+      action: 'access_granted',
+      blocked: false,
+      details: `Kavitha Vel assigned Leo Martin (Trainee) to ${createdClients[0].name}`,
+    },
+  ]);
 
   console.log('--- Seed Completed Successfully! ---');
   console.log('Test Accounts (Password for all: Password123!):');
-  console.log(' - Partner: partner.elena@apexadvisory.com');
+  console.log(' - Partner: partner.kavitha@vaigaivel.test');
   console.log(' - Staff:   staff.sarah@apexadvisory.com');
-  console.log(' - Client:  client.novatech@clientlocker.test');
+  console.log(' - Trainee: staff.trainee@vaigaivel.test');
+  console.log(' - Auditor: auditor.kumar@apexadvisory.com (View-only for 2 clients)');
+  console.log(' - Client:  client.novatech@clientlocker.test (Magic link enabled)');
 }
 
 runSeed().catch((err) => {
   console.error('Seed script failed:', err);
   process.exit(1);
 });
-
