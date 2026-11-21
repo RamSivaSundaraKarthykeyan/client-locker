@@ -1,0 +1,32 @@
+%PDF-1.4
+1 0 obj
+<</Type/Catalog/Pages 2 0 R>>
+endobj
+2 0 obj
+<</Type/Pages/Count 1/Kids[3 0 R]>>
+endobj
+3 0 obj
+<</Type/Page/Parent 2 0 R/MediaBox[0 0 612 792]/Resources<</Font<</F1 4 0 R>>>>/Contents 5 0 R>>
+endobj
+4 0 obj
+<</Type/Font/Subtype/Type1/BaseFont/Helvetica>>
+endobj
+5 0 obj
+<</Length 1931>>
+stream
+BT /F1 10 Tf 50 750 Td 14 TL (AI Notes - Vizdale Full-Stack Developer Internship) ' (Project: ClientLocker \(Vaigai Vel & Associates, Madurai\)) ' (Developer: Karthykeyan) ' (Repository: https://github.com/RamSivaSundaraKarthykeyan/client-locker) ' () ' (ONE TIME AI GOT IT WRONG:) ' (1. What did you ask it to do?) ' (   Asked AI to enforce client access restrictions and implement expiring download links.) ' () ' (2. What did it do wrong?) ' (   The AI initially generated client-side download links directly referencing the public storage bucket,) ' (   and only hid the download buttons on the UI for unassigned staff.) ' (   This meant any user could copy the permanent URL or bypass the UI and fetch confidential files.) ' () ' (3. How did you catch it?) ' (   Caught it during testing by pasting the direct file link in a private browser window as an unassigned trainee,) ' (   observing that storage was publicly reachable without hitting the server authorization check.) ' () ' (4. How did you fix it?) ' (   Set bucket permissions to strictly private \(public = false\). Created /api/files/:id/link generating a 10-minute token,) ' (   and routed all file downloads through /api/links/:token which strictly verifies active session, link expiration,) ' (   and server-side client_access row on every single request, returning 403 and logging to activity_log if unassigned.) ' () ' (5. What will you check next time?) ' (   Always audit that access controls and private assets are gated on the server rather than trusting front-end views.) ' () ' (LOOKING BACK:) ' (Tools used: Antigravity AI, Claude Code for scaffolding, SQL schema design, and Vitest suite authoring.) ' (Understood well: Server-side authorization pipelines, multi-role session verification, and streaming response headers.) ' (To explore further: Real-time Supabase CDC websocket invalidation for instant client-side push updates without polling.) ' ET
+endstream
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000054 00000 n 
+0000000105 00000 n 
+0000000217 00000 n 
+0000000280 00000 n 
+trailer
+<</Size 6/Root 1 0 R>>
+startxref
+2261
+%%EOF

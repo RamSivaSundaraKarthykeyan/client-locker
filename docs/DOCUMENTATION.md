@@ -77,6 +77,43 @@ This document maintains a chronological record of all features, architecture set
 
 ---
 
+### 2026-11-21: Milestone 3 & 4 (M3 & M4) — Enterprise Security, AI Matching & Final Hand-in
+- **Scope**: Final compulsory milestone deliverables satisfying all requirements of the *Vaigai Vel & Associates* client brief and internship Gantt chart.
+- **Key Modules Implemented**:
+  1. **Server-Enforced Access Control Architecture** ([`lib/access.ts`](../lib/access.ts), [`app/api/clients/route.ts`](../app/api/clients/route.ts)):
+     - Dynamic permission validation on all client and file endpoints.
+     - Partners see all clients; staff and auditors strictly see assigned clients; clients see only their own company.
+     - Unassigned staff receive `403 Forbidden` on file listing, viewing, and upload attempts.
+  2. **10-Minute Expiring Download Links** ([`app/api/files/[id]/link/route.ts`](../app/api/files/[id]/link/route.ts), [`app/api/links/[token]/route.ts`](../app/api/links/[token]/route.ts)):
+     - Cryptographically signed temporary tokens (`download_links` table).
+     - Triple-check verification pipeline: checks (1) active session, (2) token expiration, and (3) real-time access rights.
+     - If any check fails, access is blocked and logged.
+  3. **Immediate Access Revocation** ([`app/api/access/route.ts`](../app/api/access/route.ts), [`app/api/access/[id]/route.ts`](../app/api/access/[id]/route.ts)):
+     - Managing partner can grant or revoke staff access directly on the client page.
+     - Revocation takes effect on the person's very next request with no logout needed.
+  4. **Immutable Activity Audit Log** ([`lib/activity.ts`](../lib/activity.ts), [`app/api/activity/route.ts`](../app/api/activity/route.ts), [`app/partner/dashboard/page.tsx`](../app/partner/dashboard/page.tsx)):
+     - Automatically logs uploads, link creations, file opens, access changes, and blocked attempts.
+     - Accessible exclusively to partners (`GET /api/activity`); staff and auditors receive 403.
+  5. **View-Only Auditor Role** ([`app/auditor/dashboard/page.tsx`](../app/auditor/dashboard/page.tsx)):
+     - Seeded statutory auditor (*Kumar Swaminathan*) assigned to exactly 2 clients.
+     - Upload buttons hidden on the page and uploads blocked with 403 on the server.
+  6. **Client Passwordless Magic Link Login** ([`app/api/auth/magic/route.ts`](../app/api/auth/magic/route.ts), [`app/login/magic/route.ts`](../app/login/magic/route.ts)):
+     - 15-minute single-use token login without requiring password management.
+  7. **AI Checklist Matching Feature** ([`app/api/files/[id]/suggest/route.ts`](../app/api/files/[id]/suggest/route.ts), [`app/api/files/[id]/confirm/route.ts`](../app/api/files/[id]/confirm/route.ts)):
+     - Automatic suggestion of matching compliance checklist items based on file semantics and open client tasks.
+     - Confirmation step marks the checklist item complete and links the file.
+     - Graceful fallback allows manual selection if AI is unavailable.
+  8. **10 Automated Tests in CI** ([`__tests__/access.test.ts`](../__tests__/access.test.ts), [`.github/workflows/ci.yml`](../.github/workflows/ci.yml)):
+     - Automated test suite validating all 10 brief requirements passing in GitHub Actions.
+  9. **Hand-in Deliverables**:
+     - `docs/AI_NOTES.pdf`: One time AI got it wrong and how it was caught/fixed.
+     - `docs/PROGRESS.pdf`: Project progress tracking sheet.
+     - `docs/REAL_USERS.pdf`: Feedback log from 10 real testers.
+     - `docs/SPEED.png`: Lighthouse performance verification score.
+     - `README.md`: Updated to match template with test logins and demo moment explanation.
+
+---
+
 ## Technical Stack Summary
 
 | Layer | Technology | Version | Purpose |

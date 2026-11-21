@@ -1,0 +1,32 @@
+%PDF-1.4
+1 0 obj
+<</Type/Catalog/Pages 2 0 R>>
+endobj
+2 0 obj
+<</Type/Pages/Count 1/Kids[3 0 R]>>
+endobj
+3 0 obj
+<</Type/Page/Parent 2 0 R/MediaBox[0 0 612 792]/Resources<</Font<</F1 4 0 R>>>>/Contents 5 0 R>>
+endobj
+4 0 obj
+<</Type/Font/Subtype/Type1/BaseFont/Helvetica>>
+endobj
+5 0 obj
+<</Length 1747>>
+stream
+BT /F1 10 Tf 50 750 Td 14 TL (Project Progress Report - ClientLocker \(Vaigai Vel & Associates\)) ' (Intern: Karthykeyan | Deadline: Milestone 4 \(Final Hand-in\)) ' (Live URL: https://client-locker-ohhb.vercel.app/ | GitHub: client-locker) ' () ' (1. Project Overview:) ' (   How might we ensure every person at a busy accounting firm sees only the files they are meant to see,) ' (   while partners always know who opened what? AI feature suggests checklist compliance items upon upload.) ' () ' (2. Objectives & Milestones Status:) ' (   - M1: Get Started \(Nov 7\): Done \(Online landing page, Plan, CI Key Scan\)) ' (   - M2: Go Live \(Nov 13\): Done \(Real database, staff login, private upload, file opening\)) ' (   - M3: Build & Tests \(Nov 21\): Done \(Server access rules, magic link, expiring links, auditor role, 10 tests\)) ' (   - M4: Final Hand-in \(Nov 28\): Done \(Two-browser demo moment, 85+ speed score, README, documentation\)) ' () ' (3. AI Feature & Web Dev Progress:) ' (   - AI Feature: File metadata + document text keyword matching with open client checklist items \(Done\)) ' (   - Fallback: Gracefully allows manual checklist selection if AI fails or document has no text \(Done\)) ' (   - 10 Automated Tests: Passing in GitHub Actions CI with node:test & tsx \(Done\)) ' (   - Speed Score: Achieved 94/100 on desktop/mobile Lighthouse audit \(docs/SPEED.png\)) ' () ' (4. Weekly Report & Challenges Fixed:) ' (   - Fixed Turbopack font fetching in sandboxed CI by configuring webpack fallback.) ' (   - Fixed client file leakage by routing through temporary 10-minute tokens with server validation.) ' (   - Built full demo moment: Partner revokes Trainee access -> instant 403 & logged in partner audit trail.) ' ET
+endstream
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000054 00000 n 
+0000000105 00000 n 
+0000000217 00000 n 
+0000000280 00000 n 
+trailer
+<</Size 6/Root 1 0 R>>
+startxref
+2077
+%%EOF

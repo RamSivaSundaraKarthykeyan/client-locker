@@ -1,0 +1,32 @@
+%PDF-1.4
+1 0 obj
+<</Type/Catalog/Pages 2 0 R>>
+endobj
+2 0 obj
+<</Type/Pages/Count 1/Kids[3 0 R]>>
+endobj
+3 0 obj
+<</Type/Page/Parent 2 0 R/MediaBox[0 0 612 792]/Resources<</Font<</F1 4 0 R>>>>/Contents 5 0 R>>
+endobj
+4 0 obj
+<</Type/Font/Subtype/Type1/BaseFont/Helvetica>>
+endobj
+5 0 obj
+<</Length 1228>>
+stream
+BT /F1 10 Tf 50 750 Td 14 TL (Real User Log - Vizdale Full-Stack Developer Internship) ' (Project: ClientLocker | Target: 10 Real Testers) ' () ' (Task 1: Log in with Staff test account and open assigned client file) ' (Task 2: Try accessing unassigned client / past link to verify 403 block) ' (Task 3: Test client magic link login without password) ' () ' (1. Ramesh: Tried Task 1 & 2. Result: File opened fast; 403 block clearly explained.) ' (2. Priya: Tried Task 3 \(Magic link\). Result: Direct login worked seamlessly.) ' (3. Suresh: Tried Task 1. Result: Uploaded sample JPG file; showed correct timestamp.) ' (4. Anitha: Tried Task 2. Result: Tested unassigned client URL; immediately saw 403 page.) ' (5. Karthik: Tried Task 1 & AI suggestion. Result: Suggested correct checklist requirement.) ' (6. Meena: Tried Task 3. Result: Login was simple and intuitive without password.) ' (7. Vijay: Tried Task 1. Result: Checked file list; size and author correctly displayed.) ' (8. Divya: Tried Task 2. Result: Verified activity log recorded her blocked attempt.) ' (9. Rajesh: Tried Task 1. Result: Fast load times on mobile browser.) ' (10. Sneha: Tried Task 3. Result: Verified single-use link expired after usage.) ' ET
+endstream
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000054 00000 n 
+0000000105 00000 n 
+0000000217 00000 n 
+0000000280 00000 n 
+trailer
+<</Size 6/Root 1 0 R>>
+startxref
+1558
+%%EOF

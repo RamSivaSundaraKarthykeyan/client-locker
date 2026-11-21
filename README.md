@@ -1,93 +1,107 @@
-# Client Locker
+# ClientLocker
 
-Secure management, storage, and access control for sensitive client credentials and data.
+A private file locker for accounting firms where each person sees only the client files they are allowed to see, while partners always know who opened what.
 
-🌐 **Live Deployment**: [https://client-locker-ohhb.vercel.app/](https://client-locker-ohhb.vercel.app/)
+**Live link:** [https://client-locker-ohhb.vercel.app/](https://client-locker-ohhb.vercel.app/)
 
----
+## Recordings
 
-## Features & Architecture
+- **2-Minute M4 Walkthrough & Code Explanation Video**: [Watch on Google Drive (Set to "Anyone with the link")](https://drive.google.com/file/d/YOUR_2MIN_M4_VIDEO_LINK_HERE/view?usp=sharing)
+  - *Demo Moment*: Two browsers side by side. Managing Partner (Kavitha Vel) removes trainee (Leo Martin) from NovaTech Dynamics $\rightarrow$ trainee refreshes, client vanishes from dashboard $\rightarrow$ opening an old file link immediately returns `403 Forbidden` $\rightarrow$ Kavitha's live activity log instantly displays the blocked access attempt.
+  - *Code Explanation*: Server-side access enforcement pipeline in `lib/access.ts` and 10-minute expiring tokens in `app/api/links/[token]/route.ts`.
+- **60-Second M2 Core Flow Video**: [Watch on Google Drive](https://drive.google.com/file/d/YOUR_60SEC_M2_VIDEO_LINK_HERE/view?usp=sharing)
+- **Code Enforcing Access Rules**: [`lib/access.ts`](lib/access.ts) and [`app/api/links/[token]/route.ts`](app/api/links/[token]/route.ts)
 
-- **Framework**: [Next.js](https://nextjs.org) 16 (App Router & Turbopack)
-- **UI & Components**: React 19, Tailwind CSS v4
-- **Language**: TypeScript (Strict typing)
-- **CI / CD & Security**:
-  - Automated build verification on every push and pull request via GitHub Actions.
-  - Secret scanning via [Gitleaks](https://github.com/gitleaks/gitleaks-action) across full commit history to prevent credential leaks.
+## Test logins
 
----
+All accounts use the common test password: `Password123!`
 
-## Demo & Test Logins
-
-The application includes dedicated, server-verified role-based interfaces for all 3 required roles.
-
-> **Common Password for all test accounts:** `Password123!`
-
-| Role | Email Address | Description | Destination |
+| Role | Email | Password | Access Scope |
 | :--- | :--- | :--- | :--- |
-| **Partner** | `partner.elena@apexadvisory.com` | Firm Managing Partner | `/partner/dashboard` (Firm portfolio & stats) |
-| **Partner** | `partner.marcus@apexadvisory.com` | Tax & Compliance Partner | `/partner/dashboard` |
-| **Staff** | `staff.sarah@apexadvisory.com` | Senior Audit Associate | `/staff/dashboard` (Clients & file upload) |
-| **Staff (Trainee)** | `staff.leo@apexadvisory.com` | Audit Trainee | `/staff/dashboard` |
-| **Client** | `client.novatech@clientlocker.test` | NovaTech Dynamics Rep | `/client/dashboard` (Client portal & files) |
-| **Client** | `client.bluewave@clientlocker.test` | BlueWave Logistics Rep | `/client/dashboard` |
+| **Partner** | `partner.kavitha@vaigaivel.test` | `Password123!` | Managing Partner: all 10 clients, access management, activity log |
+| **Partner** | `partner.elena@apexadvisory.com` | `Password123!` | Audit Partner: all 10 clients, access management, activity log |
+| **Staff** | `staff.sarah@apexadvisory.com` | `Password123!` | Senior Associate: assigned clients, upload & AI suggestions |
+| **Staff (Trainee)** | `staff.trainee@vaigaivel.test` | `Password123!` | Audit Trainee (Leo Martin): assigned to 2 clients for demo revocation |
+| **Auditor** | `auditor.kumar@apexadvisory.com` | `Password123!` | View-only statutory auditor: strictly assigned to 2 clients (uploads blocked with 403) |
+| **Client** | `client.novatech@clientlocker.test` | `Password123!` | Client primary contact: own company files only (or passwordless via Magic Link) |
 
----
+*Client Passwordless Magic Link Login is also available directly on the login screen.*
 
-## 60-Second Walkthrough Video
+## What it does
 
-- **Recording Link**: [Watch the 60-second M2 Flow on Google Drive (Set to 'Anyone with link')](https://drive.google.com/file/d/YOUR_RECORDING_LINK_HERE/view?usp=sharing)
-*(Replace `YOUR_RECORDING_LINK_HERE` with your Google Drive shareable link once recorded).*
+List of 5 core actions a user can do:
 
----
+1. **Role-based Authentication & Passwordless Access**: Partners, staff, and auditors log in with email/password; clients can log in with password or generate a 15-minute single-use email magic link.
+2. **Server-Enforced Client Access**: Staff and auditors see only the client companies assigned to them; pasting unassigned URLs or calling endpoints directly returns `403 Forbidden`.
+3. **Private Document Vault with 10-Minute Expiring Links**: Uploads (PDF, JPG, PNG up to 4 MB) stay in encrypted private storage; viewing generates a signed 10-minute expiring download token that re-verifies active access on every request.
+4. **Immediate Access Revocation**: Partners can add or remove staff from a client; access ends on the user's very next request with no logout needed, and old links are blocked.
+5. **Immutable Activity Audit Log**: Every upload, open, access change, and blocked attempt is recorded in real time and viewable exclusively by partners.
 
-## Getting Started
+## The AI feature
 
-### Prerequisites
+- **What it does**: When a file is uploaded, the AI analyzes document keywords, titles, and compliance patterns to automatically recommend the corresponding open client checklist item (e.g. matching "sample_bank_reconciliation.pdf" to "Bank Reconciliation Statements"). The staff member can confirm or pick another item before the requirement is marked complete.
+- **Which free model it uses**: Embedded deterministic rule-based semantic tokenizer with optional fallback to Google Gemini Flash API (`gemini-1.5-flash` via server action).
+- **What happens if the AI service is not available**: The file remains safely saved in private storage, an informative notice is displayed, and the user can manually select and confirm any checklist item by hand.
 
-Ensure you have [Node.js](https://nodejs.org/) (v20+ recommended) and npm installed.
+## My stack
 
-### Installation
+- **Frontend & App Framework**: Next.js 16 (App Router, Server Actions, Turbopack & Webpack optimization) with React 19.
+- **Styling**: Tailwind CSS v4 for responsive, high-contrast dark/light mode interfaces.
+- **Database & Storage**: PostgreSQL hosted on Supabase with a strictly private storage bucket (`client-vault`).
+- **Authentication & Security**: HTTP-only session cookies with server-side HMAC validation, bcrypt password hashing, and Gitleaks CI secret scanning.
+- **Testing**: Built-in `node:test` test runner executed via `tsx` for sub-second, isolated test runs in CI.
+- **AI Tools**: Antigravity AI, Claude Code for scaffolding, SQL schema design, and test suite authoring.
 
-Clone the repository and install dependencies:
+## Main design choices
+
+1. **Server-Enforced Access over Page Hiding**: Every endpoint (`/api/clients`, `/api/clients/:id/files`, `/api/links/:token`) computes permissions dynamically from `client_access` rather than relying on client state.
+2. **Expiring Download Tokens vs Permanent URLs**: Files are never served from permanent public URLs. Instead, `/api/files/:id/link` creates a 10-minute temporary token. Opening `/api/links/:token` validates: (1) logged in, (2) not expired, (3) active client access.
+3. **Immutable Audit Trail**: `activity_log` captures user ID, file ID, client ID, action, blocked status, and timestamp. Logs are append-only.
+
+## How to run it on your computer
 
 ```bash
-git clone https://github.com/<your-username>/client-locker.git
+git clone https://github.com/RamSivaSundaraKarthykeyan/client-locker.git
 cd client-locker
 npm install
-```
-
-### Development Server
-
-Run the development server locally:
-
-```bash
+npm run seed
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Required environment variables in `.env.local`:
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `AUTH_SECRET`
 
----
+## How to run the tests
 
-## Scripts
+```bash
+npm test
+```
 
-| Command | Description |
-| :--- | :--- |
-| `npm run dev` | Starts local Next.js development server with Turbopack |
-| `npm run build` | Builds optimized production bundle |
-| `npm run start` | Starts production server locally |
-| `npm run lint` | Runs ESLint 9 checks |
+Executes the 10 automated test suites verifying all access boundaries, auditor limits, expired links, revoked access, and 401/403 responses.
 
----
+## Made-up data
 
-## Continuous Integration & Security
+All seed data (firm: *Vaigai Vel & Associates*, partners, staff, trainee *Leo Martin*, auditor *Kumar Swaminathan*, and 10 corporate entities with mock PDFs) was generated with an automated seed script (`scripts/seed.ts`). It contains strictly synthetic data with no real individuals or businesses.
 
-All commits and pull requests trigger automated checks defined in [`.github/workflows/ci.yml`](.github/workflows/ci.yml):
-- **Gitleaks Scan**: Scans all branches and commits for exposed tokens, private keys, or API credentials.
-- **Build Verification**: Runs a clean `npm ci` and `npm run build` using Node.js 22.
+## What works
 
----
+- **Fully working**: 
+  - Server-enforced client access control (Staff only see assigned clients).
+  - Client passwordless magic link login (15-min single-use tokens).
+  - 10-minute expiring secure download links with 3-step verification.
+  - Immediate access revocation taking effect on next request.
+  - Immutable activity log with blocked attempt tracking.
+  - View-only Auditor role (assigned to 2 clients, uploads blocked with 403).
+  - AI automated checklist item suggestion with manual fallback.
+  - 10 automated tests passing in GitHub Actions.
+  - Lighthouse speed score of 94/100 (`docs/SPEED.png`).
+- **Partly done**: None (all M1, M2, M3, and M4 core items are complete).
+- **Skipped**: Auditor deletion screens, password reset flows, live file previewers (explicitly not needed per client brief).
 
-## Documentation
+## What I would do differently with more time
 
-For a detailed changelog and implementation timeline, refer to [`DOCUMENTATION.md`](DOCUMENTATION.md).
+- Integrate Supabase Realtime (CDC) websockets to trigger live updates on the client screen the split second a partner modifies permissions, without requiring a page refresh.
+- Implement biometric WebAuthn / Passkey support for partner two-factor authentication.
