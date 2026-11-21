@@ -1,18 +1,19 @@
 import { cookies } from 'next/headers';
 import bcrypt from 'bcryptjs';
 
+export type UserRole = 'partner' | 'staff' | 'client' | 'auditor';
+
 export interface AuthSession {
   id: string;
   email: string;
   fullName: string;
-  role: 'partner' | 'staff' | 'client';
+  role: UserRole;
   firmId?: string;
   title?: string;
 }
 
 const SESSION_COOKIE_NAME = 'cl_session';
 
-// Simple base64url JSON token with HMAC-like verification for fast, reliable server sessions
 export function signSession(session: AuthSession): string {
   const payload = JSON.stringify({
     ...session,
@@ -32,7 +33,7 @@ export function parseSession(token: string): AuthSession | null {
       id: data.id,
       email: data.email,
       fullName: data.fullName,
-      role: data.role,
+      role: data.role as UserRole,
       firmId: data.firmId,
       title: data.title,
     };
@@ -72,4 +73,3 @@ export async function hashPassword(plain: string): Promise<string> {
 export async function verifyPassword(plain: string, hash: string): Promise<boolean> {
   return bcrypt.compare(plain, hash);
 }
-

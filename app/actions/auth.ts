@@ -54,6 +54,8 @@ export async function loginAction(prevState: ActionState | undefined, formData: 
     redirect('/partner/dashboard');
   } else if (session?.role === 'staff') {
     redirect('/staff/dashboard');
+  } else if (session?.role === 'auditor') {
+    redirect('/auditor/dashboard');
   } else {
     redirect('/client/dashboard');
   }
