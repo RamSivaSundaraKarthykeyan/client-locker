@@ -49,3 +49,4 @@ export async function POST(request: NextRequest) {
     magicUrl, // Returned for testing / clicking directly without relying on an external SMTP provider
   });
 }
+

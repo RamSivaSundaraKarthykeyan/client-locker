@@ -41,3 +41,4 @@ CREATE TABLE IF NOT EXISTS activity_log (
 -- 5. Checklist item linkage to file
 ALTER TABLE checklist_items ADD COLUMN IF NOT EXISTS done BOOLEAN DEFAULT false;
 ALTER TABLE files ADD COLUMN IF NOT EXISTS checklist_item_id UUID REFERENCES checklist_items(id) ON DELETE SET NULL;
+

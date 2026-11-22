@@ -65,3 +65,4 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(new URL('/client/dashboard', request.url));
   }
 }
+

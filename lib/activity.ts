@@ -25,3 +25,4 @@ export async function logActivity(params: LogParams) {
     console.error('Failed to log activity:', err);
   }
 }
+
