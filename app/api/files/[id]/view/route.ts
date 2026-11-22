@@ -4,7 +4,7 @@ import { getServiceSupabase } from '@/lib/supabase';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ fileId: string }> }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getSession();
@@ -12,7 +12,7 @@ export async function GET(
       return new NextResponse('Unauthorized: Please log in to view files.', { status: 401 });
     }
 
-    const { fileId } = await params;
+    const { id: fileId } = await params;
     const supabase = getServiceSupabase();
 
     // Fetch file record
