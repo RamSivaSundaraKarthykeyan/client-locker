@@ -31,7 +31,7 @@ export default async function Home() {
       <main className="max-w-4xl mx-auto px-6 py-16 text-center">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-xs font-medium text-zinc-600 dark:text-zinc-400 mb-8 shadow-sm">
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          M2 Release • Private File Vault & Multi-Role Access
+          Milestone 4 (Final Hand-in) • Full Access Control & AI Verification
         </div>
 
         <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-zinc-900 dark:text-white mb-6">
@@ -39,7 +39,7 @@ export default async function Home() {
         </h1>
 
         <p className="text-lg text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto mb-10">
-          Securely upload, organize, and access confidential client files in an encrypted private vault with server-enforced role access for partners, staff, and clients.
+          Vaigai Vel & Associates (Madurai) — Enterprise file vault with server-enforced client access, 10-minute expiring tokens, immutable activity audit logging, view-only auditor role, and AI checklist matching.
         </p>
 
         <div className="flex items-center justify-center gap-4">
@@ -53,7 +53,7 @@ export default async function Home() {
       </main>
 
       <footer className="border-t border-zinc-200 dark:border-zinc-800 py-6 text-center text-xs text-zinc-400">
-        © 2026 Client Locker • Milestone 2 Implementation
+        © 2026 ClientLocker • Milestone 4 Final Implementation
       </footer>
     </div>
   );
