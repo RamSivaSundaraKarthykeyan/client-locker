@@ -3,6 +3,7 @@
 import { useActionState } from 'react';
 import { loginAction, ActionState } from '@/app/actions/auth';
 import { MagicLinkRequest } from '@/app/components/MagicLinkRequest';
+import { Partner2FALogin } from '@/app/components/Partner2FALogin';
 
 const initialState: ActionState = {};
 
@@ -114,6 +115,9 @@ export function LoginForm() {
             </button>
           </div>
         </div>
+
+        {/* Partner Two-Step Login (2FA) */}
+        <Partner2FALogin />
 
         {/* Client Magic Link Section */}
         <MagicLinkRequest />

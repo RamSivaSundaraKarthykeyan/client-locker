@@ -6,6 +6,7 @@ import { AppNavbar } from '@/app/components/AppNavbar';
 import { FileUploadCard } from '@/app/components/FileUploadCard';
 import { FileListTable, FileItem } from '@/app/components/FileListTable';
 import { ClientAccessManager, AssignedPerson } from '@/app/components/ClientAccessManager';
+import { LiveAccessWatcher } from '@/app/components/LiveAccessWatcher';
 import Link from 'next/link';
 
 export default async function ClientDetailPage({
@@ -100,6 +101,7 @@ export default async function ClientDetailPage({
       .select(`
         id,
         person_id,
+        expires_at,
         person:people!client_access_person_id_fkey(id, full_name, email, role, title)
       `)
       .eq('client_id', clientId);
@@ -113,6 +115,7 @@ export default async function ClientDetailPage({
         email: p?.email || '',
         role: p?.role || 'staff',
         title: p?.title || '',
+        expiresAt: r.expires_at,
       };
     });
 
@@ -131,6 +134,9 @@ export default async function ClientDetailPage({
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 pb-16">
       <AppNavbar session={session} title={client.name} />
+
+      {/* M5 Stretch: Live Access Watcher causes client files to vanish instantly when revoked */}
+      {session.role !== 'partner' && <LiveAccessWatcher clientId={client.id} />}
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">

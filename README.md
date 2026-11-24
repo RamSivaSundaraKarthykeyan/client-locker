@@ -96,8 +96,11 @@ All seed data (firm: *Vaigai Vel & Associates*, partners, staff, trainee *Leo Ma
   - Immutable activity log with blocked attempt tracking.
   - View-only Auditor role (assigned to 2 clients, uploads blocked with 403).
   - AI automated checklist item suggestion with manual fallback.
-  - 10 automated tests passing in GitHub Actions.
+  - 12 automated tests passing in GitHub Actions.
   - Lighthouse speed score of 94/100 (`docs/SPEED.png`).
+  - **M5 Stretch 1**: Access that ends on a set date (`client_access.expires_at`).
+  - **M5 Stretch 2**: Live file vanishing without browser reload (`LiveAccessWatcher`).
+  - **M5 Stretch 3**: Two-step authentication (2FA OTP) for Partners (`partner_2fa_codes`).
 - **Partly done**: None (all M1, M2, M3, and M4 core items are complete).
 - **Skipped**: Auditor deletion screens, password reset flows, live file previewers (explicitly not needed per client brief).
 

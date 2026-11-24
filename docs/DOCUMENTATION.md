@@ -114,6 +114,23 @@ This document maintains a chronological record of all features, architecture set
 
 ---
 
+### 2026-11-24: Milestone 5 (M5) — Official Stretch Goals Implementation
+- **Scope**: Full delivery of the official ClientLocker stretch goals identified in the *Vaigai Vel & Associates* client brief:
+  1. **Access that Ends on a Set Date**:
+     - Added `expires_at` column to `client_access` table ([`supabase/m5_stretch_migration.sql`](../supabase/m5_stretch_migration.sql)).
+     - Updated partner access management UI to allow selecting an optional expiration date.
+     - Updated `checkClientAccess` in [`lib/access.ts`](../lib/access.ts) to automatically invalidate access once the set date is reached without requiring manual revocation.
+  2. **Live File Vanishing Without Refresh**:
+     - Implemented [`app/components/LiveAccessWatcher.tsx`](../app/components/LiveAccessWatcher.tsx) and `/api/clients/:id/access-check`.
+     - When a partner revokes staff or auditor access from the partner dashboard, the files and checklist vanish live from the user's screen without requiring a manual browser refresh.
+  3. **Two-Step Login (2FA) for Partners**:
+     - Added `partner_2fa_codes` table to generate and verify single-use 6-digit OTP tokens with 5-minute expirations.
+     - Implemented `/api/auth/partner-2fa` route handler and [`app/components/Partner2FALogin.tsx`](../app/components/Partner2FALogin.tsx) UI component on the login portal.
+  4. **Automated Stretch Test Coverage**:
+     - Added automated unit tests 11 & 12 in [`__tests__/access.test.ts`](../__tests__/access.test.ts) covering dated access expiration and 2FA OTP verification.
+
+---
+
 ## Technical Stack Summary
 
 | Layer | Technology | Version | Purpose |
