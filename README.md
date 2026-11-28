@@ -108,3 +108,7 @@ All seed data (firm: *Vaigai Vel & Associates*, partners, staff, trainee *Leo Ma
 
 - Integrate Supabase Realtime (CDC) websockets to trigger live updates on the client screen the split second a partner modifies permissions, without requiring a page refresh.
 - Implement biometric WebAuthn / Passkey support for partner two-factor authentication.
+
+
+
+Video link - https://drive.google.com/file/d/1n9XUZgdkZ9czUZ6SRGrl26Z9b7GlZpHA/view?usp=sharing
